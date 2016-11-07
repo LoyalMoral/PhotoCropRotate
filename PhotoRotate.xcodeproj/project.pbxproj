@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F3731EC1DCC688000C392A2 /* PhotoRotationScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F3731EB1DCC688000C392A2 /* PhotoRotationScrollView.swift */; };
 		0F65B4511DCB170C0049AD47 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F65B4501DCB170C0049AD47 /* AppDelegate.swift */; };
 		0F65B4531DCB170C0049AD47 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F65B4521DCB170C0049AD47 /* ViewController.swift */; };
 		0F65B4561DCB170C0049AD47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F65B4541DCB170C0049AD47 /* Main.storyboard */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F3731EB1DCC688000C392A2 /* PhotoRotationScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoRotationScrollView.swift; sourceTree = "<group>"; };
 		0F65B44D1DCB170C0049AD47 /* PhotoRotate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoRotate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F65B4501DCB170C0049AD47 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0F65B4521DCB170C0049AD47 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				0F65B45C1DCB170C0049AD47 /* Info.plist */,
 				0F65B47E1DCB17300049AD47 /* PhotoRotation.storyboard */,
 				0F65B4801DCB17400049AD47 /* PhotoRotationViewController.swift */,
+				0F3731EB1DCC688000C392A2 /* PhotoRotationScrollView.swift */,
 			);
 			path = PhotoRotate;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F3731EC1DCC688000C392A2 /* PhotoRotationScrollView.swift in Sources */,
 				0F65B4811DCB17400049AD47 /* PhotoRotationViewController.swift in Sources */,
 				0F65B4531DCB170C0049AD47 /* ViewController.swift in Sources */,
 				0F65B4511DCB170C0049AD47 /* AppDelegate.swift in Sources */,
@@ -524,6 +528,7 @@
 				0F65B4771DCB170C0049AD47 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0F65B4781DCB170C0049AD47 /* Build configuration list for PBXNativeTarget "PhotoRotateTests" */ = {
 			isa = XCConfigurationList;
@@ -532,6 +537,7 @@
 				0F65B47A1DCB170C0049AD47 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0F65B47B1DCB170C0049AD47 /* Build configuration list for PBXNativeTarget "PhotoRotateUITests" */ = {
 			isa = XCConfigurationList;
@@ -540,6 +546,7 @@
 				0F65B47D1DCB170C0049AD47 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -62,7 +62,11 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     
     @IBOutlet weak var cropMaskView: UIView!
     
-    @IBOutlet weak var imageScrollView: UIScrollView!
+    @IBOutlet weak var imageScrollView: PhotoRotationScrollView!
+    @IBOutlet weak var scrollViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var scrollViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var scrollViewTrailingConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var imageView: UIImageView!
     
@@ -71,7 +75,14 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     @IBOutlet weak var imageViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewTrailingConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var cropAreaView: UIView!
+    
+    
     // MARK: - Properties
+    
+    var image: UIImage! = UIImage(named: "page1_background")!
+    
+    
     var activePanCrop = ActivePanCrop()
     
     var beganCropPanLocation = CGPoint(x: 0, y: 0)
@@ -85,9 +96,18 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
 
         // Do any additional setup after loading the view.
         
+        self.imageView.image = image
+        
         setupUI()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        updateMinZoomScaleForScrollView()
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -123,11 +143,12 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         imageScrollView.maximumZoomScale = 2
         imageScrollView.scrollsToTop = false
         
+        imageScrollView.layer.borderColor = UIColor.white.cgColor
+        imageScrollView.layer.borderWidth = 3
         
-        imageViewTopConstraint.constant = topCropConstraint.constant
-        imageViewBottomConstraint.constant = bottomCropConstraint.constant
-        imageViewLeadingConstraint.constant = leftCropConstraint.constant
-        imageViewTrailingConstraint.constant = rightCropConstraint.constant
+        syncScrollViewConstraintWithCropMask()
+        
+        
         
     }
     
@@ -135,6 +156,24 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         activePanCrop.setActive(t: false, r: false, b: false, l: false)
     }
+    
+    func updateMinZoomScaleForScrollView() {
+        
+        let imageSize: CGSize = image.size
+        if (image == nil || imageSize.width <= 0 || imageSize.height <= 0) {
+            imageScrollView.minimumZoomScale = 1
+            return
+        }
+        
+        let minScaleWith = imageScrollView.bounds.size.width / imageSize.width
+        let minScaleHeight = imageScrollView.bounds.size.height / imageSize.height
+        imageScrollView.minimumZoomScale = max(minScaleWith, minScaleHeight)
+        
+        if imageScrollView.zoomScale < imageScrollView.minimumZoomScale {
+            imageScrollView.zoomScale = imageScrollView.minimumZoomScale
+        }
+    }
+    
     
     /*----------------------------------------------------------------------------
      Description:   <#description#>
@@ -218,24 +257,13 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         }
         
         
-//        imageScrollView.bounds.origin = currentOffset
+        //imageScrollView.bounds.origin = currentOffset
         
 //        print(imageScrollView.bounds)
 //        imageScrollView.scrollRectToVisible(<#T##rect: CGRect##CGRect#>, animated: <#T##Bool#>) = currentOffset
+
         
-        
-//        if imageViewTopConstraint.constant > topCropConstraint.constant {
-            imageViewTopConstraint.constant = topCropConstraint.constant
-//        }
-//        if imageViewBottomConstraint.constant > bottomCropConstraint.constant {
-            imageViewBottomConstraint.constant = bottomCropConstraint.constant
-//        }
-//        if imageViewLeadingConstraint.constant > leftCropConstraint.constant {
-            imageViewLeadingConstraint.constant = leftCropConstraint.constant
-//        }
-//        if imageViewTrailingConstraint.constant > rightCropConstraint.constant {
-            imageViewTrailingConstraint.constant = rightCropConstraint.constant
-//        }
+        syncScrollViewConstraintWithCropMask()
         
         if imageViewTopConstraint.constant > topCropConstraint.constant {
             
@@ -249,6 +277,48 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         if imageViewTrailingConstraint.constant > rightCropConstraint.constant {
             
         }
+    }
+    
+    func syncScrollViewConstraintWithCropMask() {
+        
+//        scrollViewTopConstraint.constant = topCropConstraint.constant
+//        scrollViewBottomConstraint.constant = bottomCropConstraint.constant
+//        scrollViewLeadingConstraint.constant = leftCropConstraint.constant
+//        scrollViewTrailingConstraint.constant = rightCropConstraint.constant
+        
+        scaleScrollViewToMatchCropArea()
+    }
+    
+    func scaleScrollViewToMatchCropArea() {
+        
+        let cropSize = cropAreaView.frame.size
+        let angle = rotateAngle(from: imageScrollView.transform)
+        let w1 = fabs(sin(angle) * cropSize.height)
+        let h1 = fabs(cos(angle) * cropSize.height)
+        let h2 = fabs(sin(angle) * cropSize.width)
+        let w2 = fabs(cos(angle) * cropSize.width)
+        
+        let newSize = CGSize(width: w1 + w2, height: h1 + h2)
+        
+//        let scaleRatio = cos(angle) * 2
+//        let newSize = CGSize(width: cropSize.width * scaleRatio, height: cropSize.height * scaleRatio)
+        
+        let offsetSize = CGSize(width: 0.5 * (newSize.width - cropSize.width), height: 0.5 * (newSize.height - cropSize.height))
+        
+        scrollViewTopConstraint.constant = topCropConstraint.constant - offsetSize.height
+        scrollViewBottomConstraint.constant = bottomCropConstraint.constant - offsetSize.height
+        scrollViewLeadingConstraint.constant = leftCropConstraint.constant - offsetSize.width
+        scrollViewTrailingConstraint.constant = rightCropConstraint.constant - offsetSize.width
+        
+//        let newTransform = imageScrollView.transform.scaledBy(x: scaleRatio, y: scaleRatio)
+//        imageScrollView.transform = newTransform
+    }
+    
+    // MARK: - Utilities
+    
+    func rotateAngle(from transform: CGAffineTransform) -> CGFloat {
+        
+        return atan2(transform.b, transform.a)
     }
     
     
@@ -287,7 +357,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
             let changeLocation = CGPoint(x: location.x - previousCropPanLocation.x,
                                          y: location.y - previousCropPanLocation.y)
             
-//            updateCropMask(withChangedLocation: changeLocation)
+            updateCropMask(withChangedLocation: changeLocation)
             
             previousCropPanLocation = location
             
@@ -309,16 +379,22 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         switch gesture.state {
         case .began:
-            scrollRotatedAngle = atan2(imageScrollView.transform.b, imageScrollView.transform.a)
+            scrollRotatedAngle = rotateAngle(from: imageScrollView.transform)
             
         case .changed:
             
+            currentRotateAngle = rotateAngle(from: imageScrollView.transform)
+            
 //            currentRotateAngle = gesture.rotation
 //            scrollRotatedAngle += gesture.rotation
+            let currentTranform = imageScrollView.transform.rotated(by: scrollRotatedAngle + gesture.rotation - currentRotateAngle)
+//            let rotationTranform = CGAffineTransform(rotationAngle: scrollRotatedAngle + gesture.rotation - currentRotateAngle)
+//            let newTransform = currentTranform.concatenating(rotationTranform)
             
-            let scrollTransform = CGAffineTransform(rotationAngle: scrollRotatedAngle + gesture.rotation)
+            imageScrollView.transform = currentTranform
             
-            imageScrollView.transform = scrollTransform
+            
+            scaleScrollViewToMatchCropArea()
             
         default:
             break

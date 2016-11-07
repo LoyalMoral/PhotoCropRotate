@@ -22,7 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NK2-MJ-5Ng">
+                            <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NK2-MJ-5Ng" customClass="PhotoRotationScrollView" customModule="PhotoRotate" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="page1_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="nKe-aO-aL3">
@@ -190,7 +190,7 @@
                             <constraint firstItem="NK2-MJ-5Ng" firstAttribute="height" secondItem="kdu-kQ-uXS" secondAttribute="height" id="e6l-2g-BpZ"/>
                             <constraint firstAttribute="bottomMargin" secondItem="NK2-MJ-5Ng" secondAttribute="bottom" id="eCz-uP-jw0"/>
                             <constraint firstItem="Rqf-Yl-Qn9" firstAttribute="top" secondItem="yZt-q3-gLQ" secondAttribute="bottom" id="ijH-e7-2hz"/>
-                            <constraint firstAttribute="topMargin" secondItem="NK2-MJ-5Ng" secondAttribute="top" id="z8v-Zg-KSh"/>
+                            <constraint firstItem="NK2-MJ-5Ng" firstAttribute="top" secondItem="kdu-kQ-uXS" secondAttribute="topMargin" id="z8v-Zg-KSh"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -205,6 +205,7 @@
                         <outlet property="bottomLeftPanCropView" destination="Ue4-71-Fao" id="dbw-Za-nFr"/>
                         <outlet property="bottomPanCropView" destination="gob-1z-ONb" id="qEk-dC-Smb"/>
                         <outlet property="bottomRightPanCropView" destination="DEf-ex-qRK" id="D3i-VW-VK4"/>
+                        <outlet property="cropAreaView" destination="Qdu-Lf-sQ1" id="MOF-2J-X3W"/>
                         <outlet property="cropMaskView" destination="yZt-q3-gLQ" id="eC2-Ge-m6w"/>
                         <outlet property="imageScrollView" destination="NK2-MJ-5Ng" id="tMH-PA-NXH"/>
                         <outlet property="imageView" destination="nKe-aO-aL3" id="k9h-8I-nEg"/>
@@ -216,6 +217,10 @@
                         <outlet property="leftPanCropView" destination="ERy-wJ-V2t" id="1TA-ey-qzH"/>
                         <outlet property="rightCropConstraint" destination="9LG-g8-rsz" id="BID-V9-18O"/>
                         <outlet property="rightPanCropView" destination="eNj-5Z-ZQR" id="Yze-eH-Pd9"/>
+                        <outlet property="scrollViewBottomConstraint" destination="eCz-uP-jw0" id="q2f-3z-quu"/>
+                        <outlet property="scrollViewLeadingConstraint" destination="KHQ-ab-JPe" id="ZA3-sL-p3x"/>
+                        <outlet property="scrollViewTopConstraint" destination="z8v-Zg-KSh" id="RnU-z1-CeV"/>
+                        <outlet property="scrollViewTrailingConstraint" destination="RwS-ie-AFJ" id="abT-4E-mpB"/>
                         <outlet property="topCropConstraint" destination="7Xa-oi-XZm" id="62N-Zf-cwJ"/>
                         <outlet property="topLeftPanCropView" destination="6c5-hB-MqT" id="MIU-zw-bjW"/>
                         <outlet property="topPanCropView" destination="goc-f9-ulF" id="ukN-Ls-cdn"/>
