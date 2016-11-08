@@ -18,6 +18,10 @@
 		0F65B47F1DCB17300049AD47 /* PhotoRotation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F65B47E1DCB17300049AD47 /* PhotoRotation.storyboard */; };
 		0F65B4811DCB17400049AD47 /* PhotoRotationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F65B4801DCB17400049AD47 /* PhotoRotationViewController.swift */; };
 		0F65B4831DCB17E50049AD47 /* page1_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F65B4821DCB17E50049AD47 /* page1_background.png */; };
+		0F9BBD471DD03EB00034D13E /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9BBD461DD03EB00034D13E /* Utilities.m */; };
+		0F9BBD491DD055070034D13E /* ImagePreview.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F9BBD481DD055070034D13E /* ImagePreview.storyboard */; };
+		0F9BBD4B1DD0551C0034D13E /* ImagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9BBD4A1DD0551C0034D13E /* ImagePreviewViewController.swift */; };
+		0F9BBD4E1DD058C90034D13E /* UIImage+CropRotate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9BBD4D1DD058C90034D13E /* UIImage+CropRotate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +59,13 @@
 		0F65B47E1DCB17300049AD47 /* PhotoRotation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PhotoRotation.storyboard; sourceTree = "<group>"; };
 		0F65B4801DCB17400049AD47 /* PhotoRotationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoRotationViewController.swift; sourceTree = "<group>"; };
 		0F65B4821DCB17E50049AD47 /* page1_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page1_background.png; sourceTree = "<group>"; };
+		0F9BBD441DD03EB00034D13E /* PhotoRotate-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoRotate-Bridging-Header.h"; sourceTree = "<group>"; };
+		0F9BBD451DD03EB00034D13E /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
+		0F9BBD461DD03EB00034D13E /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
+		0F9BBD481DD055070034D13E /* ImagePreview.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ImagePreview.storyboard; sourceTree = "<group>"; };
+		0F9BBD4A1DD0551C0034D13E /* ImagePreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreviewViewController.swift; sourceTree = "<group>"; };
+		0F9BBD4C1DD058C90034D13E /* UIImage+CropRotate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+CropRotate.h"; sourceTree = "<group>"; };
+		0F9BBD4D1DD058C90034D13E /* UIImage+CropRotate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CropRotate.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,7 +125,14 @@
 				0F65B45C1DCB170C0049AD47 /* Info.plist */,
 				0F65B47E1DCB17300049AD47 /* PhotoRotation.storyboard */,
 				0F65B4801DCB17400049AD47 /* PhotoRotationViewController.swift */,
+				0F9BBD451DD03EB00034D13E /* Utilities.h */,
+				0F9BBD461DD03EB00034D13E /* Utilities.m */,
+				0F9BBD4C1DD058C90034D13E /* UIImage+CropRotate.h */,
+				0F9BBD4D1DD058C90034D13E /* UIImage+CropRotate.m */,
 				0F3731EB1DCC688000C392A2 /* PhotoRotationScrollView.swift */,
+				0F9BBD441DD03EB00034D13E /* PhotoRotate-Bridging-Header.h */,
+				0F9BBD481DD055070034D13E /* ImagePreview.storyboard */,
+				0F9BBD4A1DD0551C0034D13E /* ImagePreviewViewController.swift */,
 			);
 			path = PhotoRotate;
 			sourceTree = "<group>";
@@ -206,6 +224,7 @@
 					0F65B44C1DCB170C0049AD47 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = YNGXG4FX22;
+						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 					};
 					0F65B4601DCB170C0049AD47 = {
@@ -248,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F65B45B1DCB170C0049AD47 /* LaunchScreen.storyboard in Resources */,
+				0F9BBD491DD055070034D13E /* ImagePreview.storyboard in Resources */,
 				0F65B4831DCB17E50049AD47 /* page1_background.png in Resources */,
 				0F65B47F1DCB17300049AD47 /* PhotoRotation.storyboard in Resources */,
 				0F65B4581DCB170C0049AD47 /* Assets.xcassets in Resources */,
@@ -277,9 +297,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F3731EC1DCC688000C392A2 /* PhotoRotationScrollView.swift in Sources */,
+				0F9BBD4E1DD058C90034D13E /* UIImage+CropRotate.m in Sources */,
 				0F65B4811DCB17400049AD47 /* PhotoRotationViewController.swift in Sources */,
 				0F65B4531DCB170C0049AD47 /* ViewController.swift in Sources */,
 				0F65B4511DCB170C0049AD47 /* AppDelegate.swift in Sources */,
+				0F9BBD4B1DD0551C0034D13E /* ImagePreviewViewController.swift in Sources */,
+				0F9BBD471DD03EB00034D13E /* Utilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,11 +452,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = YNGXG4FX22;
 				INFOPLIST_FILE = PhotoRotate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Shutta.PhotoRotate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PhotoRotate/PhotoRotate-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -442,11 +468,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = YNGXG4FX22;
 				INFOPLIST_FILE = PhotoRotate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Shutta.PhotoRotate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PhotoRotate/PhotoRotate-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

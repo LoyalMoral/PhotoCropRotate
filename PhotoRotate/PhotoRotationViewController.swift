@@ -77,6 +77,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     
     @IBOutlet weak var cropAreaView: UIView!
     
+    @IBOutlet weak var cropBorderView: UIView!
+    
     
     // MARK: - Properties
     
@@ -90,6 +92,10 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     
     var panCropGesture: UIPanGestureRecognizer!
     var rotateGesture: UIRotationGestureRecognizer!
+    
+    // Save previous frame of crop view
+    // If the crop frame is change and bigger than previous frame, update scroll view frame, else don't
+    var previousCropFrame = CGRect.zero
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,9 +150,12 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         imageScrollView.scrollsToTop = false
         
         imageScrollView.layer.borderColor = UIColor.white.cgColor
-        imageScrollView.layer.borderWidth = 3
+        imageScrollView.layer.borderWidth = 1
         
-        syncScrollViewConstraintWithCropMask()
+        cropBorderView.layer.borderColor = UIColor.white.cgColor
+        cropBorderView.layer.borderWidth = 1
+        
+        scaleScrollViewToMatchCropArea()
         
         
         
@@ -262,8 +271,16 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
 //        print(imageScrollView.bounds)
 //        imageScrollView.scrollRectToVisible(<#T##rect: CGRect##CGRect#>, animated: <#T##Bool#>) = currentOffset
 
-        
-        syncScrollViewConstraintWithCropMask()
+//        self.view.layoutIfNeeded()
+//        print(previousCropFrame)
+//        print(cropAreaView.frame)
+//        if !previousCropFrame.contains(cropAreaView.frame) {
+//            scaleScrollViewToMatchCropArea()
+//            print("need")
+//        } else {
+//            print("no need")
+//        }
+        scaleScrollViewToMatchCropArea()
         
         if imageViewTopConstraint.constant > topCropConstraint.constant {
             
@@ -278,16 +295,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
             
         }
     }
-    
-    func syncScrollViewConstraintWithCropMask() {
-        
-//        scrollViewTopConstraint.constant = topCropConstraint.constant
-//        scrollViewBottomConstraint.constant = bottomCropConstraint.constant
-//        scrollViewLeadingConstraint.constant = leftCropConstraint.constant
-//        scrollViewTrailingConstraint.constant = rightCropConstraint.constant
-        
-        scaleScrollViewToMatchCropArea()
-    }
+
     
     func scaleScrollViewToMatchCropArea() {
         
@@ -345,6 +353,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         let location = gesture.location(in: cropMaskView)
         
+        previousCropFrame = cropAreaView.frame
+        
         switch gesture.state {
         case .began:
             beganCropPanLocation = location
@@ -374,8 +384,6 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     var currentRotateAngle: CGFloat = 0
     
     func handleRotateGesture(_ gesture: UIRotationGestureRecognizer) {
-        
-        print(gesture.rotation)
         
         switch gesture.state {
         case .began:
@@ -421,10 +429,10 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
 //        self.imageViewTrailingConstraint.constant = xOffset
         self.view.layoutIfNeeded()
 //
-        print("----------------")
-        print("scrollView.bounds \(scrollView.contentSize)")
-        print("imageview.frame \(imageView.frame)")
-        print("\(imageViewTopConstraint.constant), \(imageViewBottomConstraint.constant), \(imageViewLeadingConstraint.constant), \(imageViewTrailingConstraint.constant), ")
+//        print("----------------")
+//        print("scrollView.bounds \(scrollView.contentSize)")
+//        print("imageview.frame \(imageView.frame)")
+//        print("\(imageViewTopConstraint.constant), \(imageViewBottomConstraint.constant), \(imageViewLeadingConstraint.constant), \(imageViewTrailingConstraint.constant), ")
 
     }
     
@@ -441,9 +449,104 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         self.view.layoutIfNeeded()
 //        scrollView.contentSize = CGSize(width: scrollView.contentSize.width + imageViewLeadingConstraint.constant, height: <#T##CGFloat#>)
-        print("----------------")
-                print("scrollView.bounds \(scrollView.contentSize)")
-                print("imageview.frame \(imageView.frame)")
-                print("\(imageViewTopConstraint.constant), \(imageViewBottomConstraint.constant), \(imageViewLeadingConstraint.constant), \(imageViewTrailingConstraint.constant), ")
+//        print("----------------")
+//                print("scrollView.bounds \(scrollView.contentSize)")
+//                print("imageview.frame \(imageView.frame)")
+//                print("\(imageViewTopConstraint.constant), \(imageViewBottomConstraint.constant), \(imageViewLeadingConstraint.constant), \(imageViewTrailingConstraint.constant), ")
     }
+    
+    // MARK: - Events
+    
+    @IBAction func didPressSaveButton(_ sender: UIButton) {
+        
+        // Visible image in scrollview
+        
+        var visibleRect = CGRect.zero
+//        visibleRect.origin = imageScrollView.contentOffset
+//        visibleRect.size = imageScrollView.bounds.size
+//        let scale: CGFloat = 1 / imageScrollView.zoomScale
+//        
+//        visibleRect.origin.x *= scale
+//        visibleRect.origin.y *= scale
+//        visibleRect.size.width *= scale
+//        visibleRect.size.height *= scale
+        
+        visibleRect = imageScrollView.convert(imageScrollView.bounds, to: imageView)
+        
+        
+        
+        
+//        var transform = CGAffineTransform.identity
+//        
+//        // translate
+////        CGPoint translation = [self.photoView photoTranslation];
+////        transform = CGAffineTransformTranslate(transform, translation.x, translation.y);
+//
+//        transform = transform.translatedBy(x: visibleRect.origin.x, y: visibleRect.origin.y)
+//        
+//        // rotate
+//        transform = transform.rotated(by: currentRotateAngle)
+//        
+//        // scale
+//        let t = imageView.transform
+//        let xScale: CGFloat =  sqrt(t.a * t.a + t.c * t.c)
+//        let yScale: CGFloat = sqrt(t.b * t.b + t.d * t.d)
+//        transform = transform.scaledBy(x: xScale, y: yScale)
+////        transform = transform.scaledBy(x: imageScrollView.zoomScale, y: imageScrollView.zoomScale)
+//        
+//        let cropped = Utilities.newTransformedImage(transform, sourceImage: image.cgImage, sourceSize: image.size, sourceOrientation: image.imageOrientation, outputWidth: image.size.width, cropSize: cropAreaView.frame.size, imageViewSize: imageView.bounds.size)
+        
+        var cropped = image.atRect(visibleRect)
+//        cropped = cropped.imageRotated(byRadians: currentRotateAngle)
+        
+        var cropSize = cropAreaView.frame.size
+        cropSize.width = cropSize.width / imageScrollView.zoomScale
+        cropSize.height = cropSize.height / imageScrollView.zoomScale
+        cropped = cropped.imageRotated(byRadians: currentRotateAngle, size: cropSize)
+        
+        
+        
+        let imagePV = UIStoryboard.init(name: "ImagePreview", bundle: nil).instantiateInitialViewController() as! ImagePreviewViewController
+        imagePV.image = cropped
+        
+        self.present(imagePV, animated: false, completion: {
+            
+        })
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        var transform = CGAffineTransform.identity
+//        
+//        // translate
+//        CGPoint translation = [self.photoView photoTranslation];
+//        transform = CGAffineTransformTranslate(transform, translation.x, translation.y);
+//        
+//        // rotate
+//        transform = CGAffineTransformRotate(transform, self.photoView.angle);
+//        
+//        // scale
+//        CGAffineTransform t = self.photoView.photoContentView.transform;
+//        CGFloat xScale =  sqrt(t.a * t.a + t.c * t.c);
+//        CGFloat yScale = sqrt(t.b * t.b + t.d * t.d);
+//        transform = CGAffineTransformScale(transform, xScale, yScale);
+//        
+//        CGImageRef imageRef = [self newTransformedImage:transform
+//            sourceImage:self.image.CGImage
+//            sourceSize:self.image.size
+//            sourceOrientation:self.image.imageOrientation
+//            outputWidth:self.image.size.width
+//            cropSize:self.photoView.cropView.frame.size
+//            imageViewSize:self.photoView.photoContentView.bounds.size];
+//        
+//        UIImage *image = [UIImage imageWithCGImage:imageRef];
+//        CGImageRelease(imageRef);
+        
+    }
+    
 }
