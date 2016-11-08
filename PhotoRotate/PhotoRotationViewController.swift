@@ -82,12 +82,15 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     
     // MARK: - Properties
     
-    var image: UIImage! = UIImage(named: "page1_background")!
+    var image: UIImage!
     
+    var didResetImage = false
+    
+    let minCropPadding: CGFloat = 20
+    let minCropSize: CGFloat = 80
     
     var activePanCrop = ActivePanCrop()
     
-    var beganCropPanLocation = CGPoint(x: 0, y: 0)
     var previousCropPanLocation: CGPoint!
     
     var panCropGesture: UIPanGestureRecognizer!
@@ -99,6 +102,9 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     
     var previousScrollViewFrame = CGRect.zero
     var previousScrollViewOffset = CGPoint.zero
+    
+    var scrollRotatedAngle: CGFloat = 0
+    var currentRotateAngle: CGFloat = 0
     
     
     override func viewDidLoad() {
@@ -115,8 +121,12 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         super.viewDidLayoutSubviews()
         
         updateMinZoomScaleForScrollView()
+        
+        if !didResetImage {
+            didResetImage = true
+            reset()
+        }
     }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -158,11 +168,37 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         cropBorderView.layer.borderColor = UIColor.white.cgColor
         cropBorderView.layer.borderWidth = 1
+    }
+    
+    /*----------------------------------------------------------------------------
+     Description:   reset crop tool to fit image, 
+                    call this after views have been layouted (to get correct superview's frame)
+     -----------------------------------------------------------------------------*/
+    func reset() {
+        
+        scrollRotatedAngle = 0
+        currentRotateAngle = 0
+        
+        let imageSize = image.size
+        let maxSize = CGSize(width: cropMaskView.bounds.size.width - 2 * minCropPadding,
+                             height: cropMaskView.bounds.size.height - 2 * minCropPadding)
+        
+        let fitRatio = min(maxSize.width / imageSize.width, maxSize.height / imageSize.height)
+        let fitSize = CGSize(width: imageSize.width * fitRatio, height: imageSize.height * fitRatio)
+        
+        let minHorizontalConstraint = 0.5 * (cropMaskView.bounds.size.width - fitSize.width)
+        let minVerticalConstraint = 0.5 * (cropMaskView.bounds.size.height - fitSize.height)
+        
+        topCropConstraint.constant = minVerticalConstraint
+        bottomCropConstraint.constant = minVerticalConstraint
+        rightCropConstraint.constant = minHorizontalConstraint
+        leftCropConstraint.constant = minHorizontalConstraint
+        
+        imageScrollView.transform = CGAffineTransform.identity
         
         scaleScrollViewToMatchCropArea()
-        
-        
-        
+        updateMinZoomScaleForScrollView()
+        imageScrollView.zoomScale = imageScrollView.minimumZoomScale
     }
     
     func resetActivePanCropDirections() {
@@ -171,6 +207,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     }
     
     func updateMinZoomScaleForScrollView() {
+        
+        self.view.layoutIfNeeded()
         
         let imageSize: CGSize = image.size
         if (image == nil || imageSize.width <= 0 || imageSize.height <= 0) {
@@ -228,8 +266,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     func updateCropMask(withChangedLocation changeLocation: CGPoint) {
         
         var limitVariable: CGFloat = 0
-        let minConstraint: CGFloat = 20
-        let minCropSize: CGFloat = 80
+        
         let maxViewSize = self.cropMaskView.bounds.size
         let totalSize = CGPoint(x: maxViewSize.width - minCropSize, y: maxViewSize.height - minCropSize)
         
@@ -237,7 +274,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         if activePanCrop.top == true {
             limitVariable = topCropConstraint.constant + changeLocation.y
-            limitVariable = min(max(limitVariable, minConstraint), totalSize.y - bottomCropConstraint.constant)
+            limitVariable = min(max(limitVariable, minCropPadding), totalSize.y - bottomCropConstraint.constant)
             topCropConstraint.constant = limitVariable
             
 //            if changeLocation.y > 0 {
@@ -249,17 +286,17 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         if activePanCrop.right == true {
             limitVariable = rightCropConstraint.constant - changeLocation.x
-            limitVariable = min(max(limitVariable, minConstraint), totalSize.x - leftCropConstraint.constant)
+            limitVariable = min(max(limitVariable, minCropPadding), totalSize.x - leftCropConstraint.constant)
             rightCropConstraint.constant = limitVariable
         }
         if activePanCrop.bottom == true {
             limitVariable = bottomCropConstraint.constant - changeLocation.y
-            limitVariable = min(max(limitVariable, minConstraint), totalSize.y - topCropConstraint.constant)
+            limitVariable = min(max(limitVariable, minCropPadding), totalSize.y - topCropConstraint.constant)
             bottomCropConstraint.constant = limitVariable
         }
         if activePanCrop.left == true {
             limitVariable = leftCropConstraint.constant + changeLocation.x
-            limitVariable = min(max(limitVariable, minConstraint), totalSize.x - rightCropConstraint.constant)
+            limitVariable = min(max(limitVariable, minCropPadding), totalSize.x - rightCropConstraint.constant)
             leftCropConstraint.constant = limitVariable
             
 //            if changeLocation.x > 0 {
@@ -338,6 +375,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
 
     
     func scaleScrollViewToMatchCropArea() {
+        
+        self.view.layoutIfNeeded()
         
         let cropSize = cropAreaView.frame.size
         let angle = rotateAngle(from: imageScrollView.transform)
@@ -432,7 +471,6 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         switch gesture.state {
         case .began:
-            beganCropPanLocation = location
             previousCropPanLocation = location
             
             activePanCrop = checkActivePanCropDirection(with: gesture)
@@ -457,9 +495,6 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     /*----------------------------------------------------------------------------
      Description:   Rotate scroll view (image)
      -----------------------------------------------------------------------------*/
-    var scrollRotatedAngle: CGFloat = 0
-    var currentRotateAngle: CGFloat = 0
-    
     func handleRotateGesture(_ gesture: UIRotationGestureRecognizer) {
         
         switch gesture.state {
@@ -627,5 +662,11 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
 //        CGImageRelease(imageRef);
         
     }
+    
+    @IBAction func didPressResetButton(_ sender: UIButton) {
+        
+        self.reset()
+    }
+    
     
 }

@@ -20,6 +20,8 @@ class ViewController: UIViewController {
         let storyboard = UIStoryboard(name: "PhotoRotation", bundle: nil)
         
         let vc: PhotoRotationViewController = storyboard.instantiateInitialViewController() as! PhotoRotationViewController
+        vc.image = UIImage(named: "001 - 1920x1200.jpg")!
+//        vc.image = UIImage(named: "page1_background")!
         
         self.addChildViewController(vc)
         self.imageContainerView.addSubview(vc.view)

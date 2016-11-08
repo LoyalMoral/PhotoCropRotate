@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0F3731EC1DCC688000C392A2 /* PhotoRotationScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F3731EB1DCC688000C392A2 /* PhotoRotationScrollView.swift */; };
+		0F376CF81DD1BF150029BB6E /* 001 - 1920x1200.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0F376CF71DD1BF150029BB6E /* 001 - 1920x1200.jpg */; };
 		0F65B4511DCB170C0049AD47 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F65B4501DCB170C0049AD47 /* AppDelegate.swift */; };
 		0F65B4531DCB170C0049AD47 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F65B4521DCB170C0049AD47 /* ViewController.swift */; };
 		0F65B4561DCB170C0049AD47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F65B4541DCB170C0049AD47 /* Main.storyboard */; };
@@ -43,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		0F3731EB1DCC688000C392A2 /* PhotoRotationScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoRotationScrollView.swift; sourceTree = "<group>"; };
+		0F376CF71DD1BF150029BB6E /* 001 - 1920x1200.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "001 - 1920x1200.jpg"; sourceTree = "<group>"; };
 		0F65B44D1DCB170C0049AD47 /* PhotoRotate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoRotate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F65B4501DCB170C0049AD47 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0F65B4521DCB170C0049AD47 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 		0F65B44F1DCB170C0049AD47 /* PhotoRotate */ = {
 			isa = PBXGroup;
 			children = (
+				0F376CF71DD1BF150029BB6E /* 001 - 1920x1200.jpg */,
 				0F65B4821DCB17E50049AD47 /* page1_background.png */,
 				0F65B4501DCB170C0049AD47 /* AppDelegate.swift */,
 				0F65B4521DCB170C0049AD47 /* ViewController.swift */,
@@ -270,6 +273,7 @@
 				0F9BBD491DD055070034D13E /* ImagePreview.storyboard in Resources */,
 				0F65B4831DCB17E50049AD47 /* page1_background.png in Resources */,
 				0F65B47F1DCB17300049AD47 /* PhotoRotation.storyboard in Resources */,
+				0F376CF81DD1BF150029BB6E /* 001 - 1920x1200.jpg in Resources */,
 				0F65B4581DCB170C0049AD47 /* Assets.xcassets in Resources */,
 				0F65B4561DCB170C0049AD47 /* Main.storyboard in Resources */,
 			);

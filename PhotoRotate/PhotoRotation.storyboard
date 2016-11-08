@@ -18,7 +18,7 @@
                         <viewControllerLayoutGuide type="top" id="OgW-gm-Q5C"/>
                         <viewControllerLayoutGuide type="bottom" id="Rqf-Yl-Qn9"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="kdu-kQ-uXS">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="kdu-kQ-uXS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -273,6 +273,17 @@
                                     <action selector="didPressSaveButton:" destination="hZc-lx-cB7" eventType="touchUpInside" id="zyv-x8-FTA"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="thl-RQ-faF">
+                                <rect key="frame" x="10" y="613" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="SQE-Vb-IB5"/>
+                                    <constraint firstAttribute="height" constant="44" id="yEO-rl-KMp"/>
+                                </constraints>
+                                <state key="normal" title="Reset"/>
+                                <connections>
+                                    <action selector="didPressResetButton:" destination="hZc-lx-cB7" eventType="touchUpInside" id="UjD-wf-bcI"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -284,6 +295,7 @@
                             <constraint firstItem="oiS-0L-AS8" firstAttribute="top" secondItem="NK2-MJ-5Ng" secondAttribute="top" id="Ru4-I9-yfV"/>
                             <constraint firstAttribute="trailing" secondItem="NK2-MJ-5Ng" secondAttribute="trailing" id="RwS-ie-AFJ"/>
                             <constraint firstAttribute="trailing" secondItem="yZt-q3-gLQ" secondAttribute="trailing" id="Tlc-bo-V2A"/>
+                            <constraint firstItem="thl-RQ-faF" firstAttribute="leading" secondItem="kdu-kQ-uXS" secondAttribute="leading" constant="10" id="UaX-gn-zqB"/>
                             <constraint firstAttribute="trailing" secondItem="U1D-Tz-cJi" secondAttribute="trailing" constant="10" id="bkm-00-W0E"/>
                             <constraint firstItem="yZt-q3-gLQ" firstAttribute="top" secondItem="OgW-gm-Q5C" secondAttribute="bottom" id="cMA-JZ-Fff"/>
                             <constraint firstItem="NK2-MJ-5Ng" firstAttribute="height" secondItem="kdu-kQ-uXS" secondAttribute="height" id="e6l-2g-BpZ"/>
@@ -291,6 +303,7 @@
                             <constraint firstItem="oiS-0L-AS8" firstAttribute="bottom" secondItem="NK2-MJ-5Ng" secondAttribute="bottom" id="f70-Ln-pew"/>
                             <constraint firstItem="Rqf-Yl-Qn9" firstAttribute="top" secondItem="U1D-Tz-cJi" secondAttribute="bottom" constant="10" id="gDj-t0-pSm"/>
                             <constraint firstItem="Rqf-Yl-Qn9" firstAttribute="top" secondItem="yZt-q3-gLQ" secondAttribute="bottom" id="ijH-e7-2hz"/>
+                            <constraint firstItem="Rqf-Yl-Qn9" firstAttribute="top" secondItem="thl-RQ-faF" secondAttribute="bottom" constant="10" id="pgl-iK-hkw"/>
                             <constraint firstItem="NK2-MJ-5Ng" firstAttribute="top" secondItem="kdu-kQ-uXS" secondAttribute="topMargin" id="z8v-Zg-KSh"/>
                         </constraints>
                         <variation key="default">
