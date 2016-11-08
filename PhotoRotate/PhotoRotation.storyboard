@@ -284,12 +284,19 @@
                                     <action selector="didPressResetButton:" destination="hZc-lx-cB7" eventType="touchUpInside" id="UjD-wf-bcI"/>
                                 </connections>
                             </button>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-180" maxValue="180" translatesAutoresizingMaskIntoConstraints="NO" id="DWU-kh-PzF">
+                                <rect key="frame" x="62" y="620" width="251" height="31"/>
+                                <connections>
+                                    <action selector="didChangeSlider:" destination="hZc-lx-cB7" eventType="valueChanged" id="rYO-jB-RtF"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="oiS-0L-AS8" firstAttribute="leading" secondItem="NK2-MJ-5Ng" secondAttribute="leading" id="05R-LC-AA3"/>
                             <constraint firstItem="yZt-q3-gLQ" firstAttribute="leading" secondItem="kdu-kQ-uXS" secondAttribute="leading" id="5C4-II-EUZ"/>
                             <constraint firstItem="NK2-MJ-5Ng" firstAttribute="width" secondItem="kdu-kQ-uXS" secondAttribute="width" id="9IZ-Vd-Zkg"/>
+                            <constraint firstItem="DWU-kh-PzF" firstAttribute="centerY" secondItem="thl-RQ-faF" secondAttribute="centerY" id="9Jv-Ou-o9h"/>
                             <constraint firstItem="NK2-MJ-5Ng" firstAttribute="leading" secondItem="kdu-kQ-uXS" secondAttribute="leading" id="KHQ-ab-JPe"/>
                             <constraint firstItem="oiS-0L-AS8" firstAttribute="trailing" secondItem="NK2-MJ-5Ng" secondAttribute="trailing" id="MOE-zl-u46"/>
                             <constraint firstItem="oiS-0L-AS8" firstAttribute="top" secondItem="NK2-MJ-5Ng" secondAttribute="top" id="Ru4-I9-yfV"/>
@@ -303,7 +310,9 @@
                             <constraint firstItem="oiS-0L-AS8" firstAttribute="bottom" secondItem="NK2-MJ-5Ng" secondAttribute="bottom" id="f70-Ln-pew"/>
                             <constraint firstItem="Rqf-Yl-Qn9" firstAttribute="top" secondItem="U1D-Tz-cJi" secondAttribute="bottom" constant="10" id="gDj-t0-pSm"/>
                             <constraint firstItem="Rqf-Yl-Qn9" firstAttribute="top" secondItem="yZt-q3-gLQ" secondAttribute="bottom" id="ijH-e7-2hz"/>
+                            <constraint firstItem="DWU-kh-PzF" firstAttribute="leading" secondItem="thl-RQ-faF" secondAttribute="trailing" constant="10" id="l7z-G1-QMm"/>
                             <constraint firstItem="Rqf-Yl-Qn9" firstAttribute="top" secondItem="thl-RQ-faF" secondAttribute="bottom" constant="10" id="pgl-iK-hkw"/>
+                            <constraint firstItem="U1D-Tz-cJi" firstAttribute="leading" secondItem="DWU-kh-PzF" secondAttribute="trailing" constant="10" id="xGv-SY-gCj"/>
                             <constraint firstItem="NK2-MJ-5Ng" firstAttribute="top" secondItem="kdu-kQ-uXS" secondAttribute="topMargin" id="z8v-Zg-KSh"/>
                         </constraints>
                         <variation key="default">
@@ -332,6 +341,7 @@
                         <outlet property="leftPanCropView" destination="ERy-wJ-V2t" id="1TA-ey-qzH"/>
                         <outlet property="rightCropConstraint" destination="9LG-g8-rsz" id="BID-V9-18O"/>
                         <outlet property="rightPanCropView" destination="eNj-5Z-ZQR" id="Yze-eH-Pd9"/>
+                        <outlet property="rotateSlider" destination="DWU-kh-PzF" id="gZC-WY-3RN"/>
                         <outlet property="scrollViewBottomConstraint" destination="eCz-uP-jw0" id="q2f-3z-quu"/>
                         <outlet property="scrollViewLeadingConstraint" destination="KHQ-ab-JPe" id="ZA3-sL-p3x"/>
                         <outlet property="scrollViewTopConstraint" destination="z8v-Zg-KSh" id="RnU-z1-CeV"/>

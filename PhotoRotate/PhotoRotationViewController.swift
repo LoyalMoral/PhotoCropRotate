@@ -79,15 +79,18 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     
     @IBOutlet weak var cropBorderView: UIView!
     
+    @IBOutlet weak var rotateSlider: UISlider!
+    
     
     // MARK: - Properties
     
-    var image: UIImage!
+    var image: UIImage! = UIImage(named: "page1_background")!
     
     var didResetImage = false
     
     let minCropPadding: CGFloat = 20
     let minCropSize: CGFloat = 80
+    let maxRotateAngle = CGFloat(M_PI_2)
     
     var activePanCrop = ActivePanCrop()
     
@@ -170,6 +173,11 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         cropBorderView.layer.borderColor = UIColor.white.cgColor
         cropBorderView.layer.borderWidth = 1
+        
+        self.rotateSlider.minimumValue = -(Float)(maxRotateAngle)
+        self.rotateSlider.maximumValue = Float(maxRotateAngle)
+        self.rotateSlider.value = 0
+        
     }
     
     /*----------------------------------------------------------------------------
@@ -182,6 +190,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         scrollRotatedAngle = 0
         currentRotateAngle = 0
+        rotateSlider.value = 0
         
         let imageSize = image.size
         maxSize = CGSize(width: cropMaskView.bounds.size.width - 2 * minCropPadding,
@@ -437,6 +446,22 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
     }
     
+    /*----------------------------------------------------------------------------
+     Description:   angle in radian
+     -----------------------------------------------------------------------------*/
+    func rotateScrollView(by angle: CGFloat) {
+        
+        var newAngle = currentRotateAngle + angle
+        newAngle = max(-maxRotateAngle, min(maxRotateAngle, newAngle))
+        let offSetAngle = newAngle - currentRotateAngle
+        
+        let currentTranform = imageScrollView.transform.rotated(by: offSetAngle)
+        
+        imageScrollView.transform = currentTranform
+        
+        currentRotateAngle = newAngle
+    }
+    
     // MARK: - Utilities
     
     func rotateAngle(from transform: CGAffineTransform) -> CGFloat {
@@ -546,16 +571,12 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
             
         case .changed:
             
-            currentRotateAngle = rotateAngle(from: imageScrollView.transform)
+//            currentRotateAngle = rotateAngle(from: imageScrollView.transform)
+//            let currentTranform = imageScrollView.transform.rotated(by: scrollRotatedAngle + gesture.rotation - currentRotateAngle)
+//            imageScrollView.transform = currentTranform
             
-//            currentRotateAngle = gesture.rotation
-//            scrollRotatedAngle += gesture.rotation
-            let currentTranform = imageScrollView.transform.rotated(by: scrollRotatedAngle + gesture.rotation - currentRotateAngle)
-//            let rotationTranform = CGAffineTransform(rotationAngle: scrollRotatedAngle + gesture.rotation - currentRotateAngle)
-//            let newTransform = currentTranform.concatenating(rotationTranform)
-            
-            imageScrollView.transform = currentTranform
-            
+            rotateScrollView(by: scrollRotatedAngle + gesture.rotation - currentRotateAngle)
+            rotateSlider.value = Float(currentRotateAngle)
             
             scaleScrollViewToMatchCropArea()
             
@@ -706,5 +727,17 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         self.reset()
     }
     
-    
+    @IBAction func didChangeSlider(_ sender: UISlider) {
+        
+        let addedAngle = CGFloat(rotateSlider.value) - currentRotateAngle
+        rotateScrollView(by: addedAngle)
+        
+        scaleScrollViewToMatchCropArea()
+        
+        cancelZoomToCropArea()
+        zoomToCropAreaIfNeeded()
+        
+//        imageScrollView.transform = imageScrollView.transform.rotated(by: addedAngle)
+//        currentRotateAngle = rotateAngle(from: imageScrollView.transform)
+    }
 }
