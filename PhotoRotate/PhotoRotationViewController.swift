@@ -167,6 +167,9 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     // but only in pan or change crop area needs to actually update
     var needZoomToCropArea = false
     
+    // keep scale when rotating image as close as possible with scale before rotate
+    var minScaleWhenRotate: CGFloat!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -179,8 +182,6 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        updateMinZoomScaleForScrollView()
         
         if !didResetImage {
             didResetImage = true
@@ -212,7 +213,6 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         panCropGesture.maximumNumberOfTouches = 1
         panCropGesture.minimumNumberOfTouches = 1
         panCropGesture.delegate = self
-//        panCropGesture.cancelsTouchesInView = false
         
         self.view.addGestureRecognizer(panCropGesture)
         
@@ -234,10 +234,6 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         photoRotationContainer.rotateSlider.value = 0
         
         // Style
-//        let kCropAreaBorderWidth: CGFloat = 1
-//        let kCropCornerThick: CGFloat = 3
-//        let kCropCornerLength: CGFloat = 20
-//        let kGridThick: CGFloat = 1 / UIScreen.main.scale
         
         cropCornerTopLeftHWidthConstraint.constant = kCropCornerLength
         cropCornerTopLeftHHeightConstraint.constant = kCropCornerThick
@@ -296,8 +292,9 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         imageScrollView.transform = CGAffineTransform.identity
         
         scaleScrollViewToMatchCropArea()
-        updateMinZoomScaleForScrollView()
+
         imageScrollView.zoomScale = imageScrollView.minimumZoomScale
+        minScaleWhenRotate = imageScrollView.minimumZoomScale
     }
     
     func cancelZoomToCropArea() {
@@ -318,9 +315,19 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         self.view.layoutIfNeeded()
         
+        var visibleRect = CGRect.zero
+        visibleRect.origin = imageScrollView.contentOffset
+//        visibleRect.size = imageScrollView.bounds.size
+        
         self.view.isUserInteractionEnabled = false
+        photoRotationContainer.view.isUserInteractionEnabled = false
         
         let fitRatio = min(maxSize.width / cropAreaView.frame.size.width, maxSize.height / cropAreaView.frame.size.height)
+        
+        visibleRect.origin.x *= fitRatio
+        visibleRect.origin.y *= fitRatio
+        
+        let newZoomScale = self.imageScrollView.zoomScale * fitRatio
         
         let minHorizontalConstraint = 0.5 * (cropMaskView.bounds.size.width - cropAreaView.frame.size.width * fitRatio)
         let minVerticalConstraint = 0.5 * (cropMaskView.bounds.size.height - cropAreaView.frame.size.height * fitRatio)
@@ -333,14 +340,19 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
             self.leftCropConstraint.constant = minHorizontalConstraint
             
             self.scaleScrollViewToMatchCropArea()
-            self.imageScrollView.zoomScale *= fitRatio
+            self.imageScrollView.zoomScale = newZoomScale
+            
+            // keep content steady at crop area after zoom
+            self.imageScrollView.contentOffset = visibleRect.origin
             
             self.view.layoutIfNeeded()
             
         }, completion: { (finished: Bool) -> Void in
             
+            self.minScaleWhenRotate = self.imageScrollView.zoomScale
             self.needZoomToCropArea = false
             self.view.isUserInteractionEnabled = true
+            self.photoRotationContainer.view.isUserInteractionEnabled = true
         })
     }
     
@@ -356,17 +368,30 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         let imageSize: CGSize = image.size
         if (image == nil || imageSize.width <= 0 || imageSize.height <= 0) {
             imageScrollView.minimumZoomScale = 1
-            return
+
+        } else {
+            
+            let minScaleWith = imageScrollView.bounds.size.width / imageSize.width
+            let minScaleHeight = imageScrollView.bounds.size.height / imageSize.height
+            imageScrollView.minimumZoomScale = max(minScaleWith, minScaleHeight)
         }
         
-        let minScaleWith = imageScrollView.bounds.size.width / imageSize.width
-        let minScaleHeight = imageScrollView.bounds.size.height / imageSize.height
-        imageScrollView.minimumZoomScale = max(minScaleWith, minScaleHeight)
         
+        if minScaleWhenRotate == nil {
+            minScaleWhenRotate = imageScrollView.minimumZoomScale
+        }
+
         if imageScrollView.zoomScale < imageScrollView.minimumZoomScale {
             imageScrollView.zoomScale = imageScrollView.minimumZoomScale
         }
     }
+    
+//    func updateMinScaleForRotating() -> () {
+//        
+//        if minScaleWhenRotate == nil || imageScrollView.zoomScale <= imageScrollView.minimumZoomScale {
+//            minScaleWhenRotate = imageScrollView.minimumZoomScale
+//        }
+//    }
     
     
     /*----------------------------------------------------------------------------
@@ -420,9 +445,6 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
             limitVariable = min(max(limitVariable, minCropPadding), totalSize.y - bottomCropConstraint.constant)
             topCropConstraint.constant = limitVariable
             
-//            if changeLocation.y > 0 {
-//                
-//            }
             currentOffset.y += changeLocation.y
             currentOffset.y = max(currentOffset.y, 0)
         }
@@ -442,18 +464,9 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
             limitVariable = min(max(limitVariable, minCropPadding), totalSize.x - rightCropConstraint.constant)
             leftCropConstraint.constant = limitVariable
             
-//            if changeLocation.x > 0 {
-//                
-//            }
             currentOffset.x += changeLocation.x
             currentOffset.x = max(currentOffset.x, 0)
         }
-        
-        
-        //imageScrollView.bounds.origin = currentOffset
-        
-//        print(imageScrollView.bounds)
-//        imageScrollView.scrollRectToVisible(<#T##rect: CGRect##CGRect#>, animated: <#T##Bool#>) = currentOffset
 
         scaleScrollViewToMatchCropArea()
         
@@ -530,6 +543,26 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         scrollViewLeadingConstraint.constant = leftCropConstraint.constant - offsetSize.width
         scrollViewTrailingConstraint.constant = rightCropConstraint.constant - offsetSize.width
         
+        updateMinZoomScaleForScrollView()
+        
+//        print("----------")
+//        print(scrollViewTopConstraint.constant)
+//        print(scrollViewTopConstraint.constant)
+//        print(scrollViewTopConstraint.constant)
+//        print(scrollViewTopConstraint.constant)
+//        print(imageScrollView.zoomScale)
+//        print(imageScrollView.minimumZoomScale)
+//        print(imageScrollView.maximumZoomScale)
+        
+        
+    }
+    
+    /*----------------------------------------------------------------------------
+     Description:   <#description#>
+     -----------------------------------------------------------------------------*/
+    func keepScrollViewZoomAtMinimumScale() -> () {
+        
+        imageScrollView.zoomScale = max(minScaleWhenRotate, imageScrollView.minimumZoomScale)
     }
     
     /*----------------------------------------------------------------------------
@@ -660,6 +693,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
             
             showGrid(showed: false, animated: true)
             
+            minScaleWhenRotate = imageScrollView.zoomScale
+            
             break
         }
     }
@@ -687,6 +722,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
             photoRotationContainer.rotateSlider.value = Float(currentRotateAngle)
             
             scaleScrollViewToMatchCropArea()
+            
+            keepScrollViewZoomAtMinimumScale()
             
         default:
             zoomToCropAreaIfNeeded()
@@ -756,6 +793,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         
         showGrid(showed: false, animated: true)
+        
+        minScaleWhenRotate = scale
     }
     
     // MARK: - Events
@@ -862,6 +901,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         cancelZoomToCropArea()
         zoomToCropAreaIfNeeded()
+        
+        keepScrollViewZoomAtMinimumScale()
     }
     
     func rotate() -> () {
