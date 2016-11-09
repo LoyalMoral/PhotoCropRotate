@@ -123,7 +123,17 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     
     weak var photoRotationContainer: PhotoRotationContainerViewController!
     
-    var image: UIImage! = UIImage(named: "page1_background")!
+    private var image: UIImage! {
+        didSet {
+            self.imageView?.image = image
+        }
+    }
+    
+    var originalImage: UIImage! {
+        didSet {
+            image = UIImage(cgImage: originalImage.cgImage!)
+        }
+    }
     
     var didResetImage = false
     
@@ -161,8 +171,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        image = UIImage(cgImage: originalImage.cgImage!)
         
-        self.imageView.image = image
         
         setupUI()
     }
@@ -248,6 +258,12 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         verticalGridsView.layer.borderWidth = 1 / UIScreen.main.scale // 1 pixel
         
         showGrid(showed: false, animated: false)
+    }
+    
+    func resetToOriginalImage() -> () {
+        
+        image = UIImage(cgImage: originalImage.cgImage!)
+        reset()
     }
     
     /*----------------------------------------------------------------------------
@@ -846,5 +862,12 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         cancelZoomToCropArea()
         zoomToCropAreaIfNeeded()
+    }
+    
+    func rotate() -> () {
+        
+        let rotateImage = self.image.imageRotated(byRadians: CGFloat(-M_PI_2))
+        self.image = rotateImage
+        reset()
     }
 }

@@ -22,51 +22,72 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FHr-SS-dyk">
-                                <rect key="frame" x="0.0" y="20" width="375" height="587"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="563"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eIb-JK-aQd">
-                                <rect key="frame" x="0.0" y="607" width="375" height="60"/>
+                                <rect key="frame" x="0.0" y="583" width="375" height="84"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MCM-ww-MHv">
-                                        <rect key="frame" x="315" y="8" width="60" height="44"/>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-180" maxValue="180" translatesAutoresizingMaskIntoConstraints="NO" id="DJR-xc-opb">
+                                        <rect key="frame" x="18" y="10" width="339" height="31"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="minimumTrackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="maximumTrackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <action selector="didChangeSlider:" destination="j4e-sx-rum" eventType="valueChanged" id="VlD-fZ-uxl"/>
+                                        </connections>
+                                    </slider>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WOF-nc-hTR">
+                                        <rect key="frame" x="0.0" y="40" width="94" height="44"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="fAS-lv-oJ4"/>
+                                            <constraint firstAttribute="height" constant="44" id="sWm-Ws-Qqy"/>
+                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                        <state key="normal" title="Rotate 90°"/>
+                                        <connections>
+                                            <action selector="didPressRotateButton:" destination="j4e-sx-rum" eventType="touchUpInside" id="Cqt-U5-PSc"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MCM-ww-MHv">
+                                        <rect key="frame" x="321" y="40" width="54" height="44"/>
+                                        <constraints>
                                             <constraint firstAttribute="height" constant="44" id="xNT-fY-gMg"/>
                                         </constraints>
-                                        <state key="normal" title="Save"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                        <state key="normal" title="Save">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
                                         <connections>
                                             <action selector="didPressSaveButton:" destination="j4e-sx-rum" eventType="touchUpInside" id="c8O-rH-3Qg"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aKQ-dR-WNm">
-                                        <rect key="frame" x="0.0" y="8" width="60" height="44"/>
+                                        <rect key="frame" x="158" y="40" width="59" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="PGk-su-bY3"/>
-                                            <constraint firstAttribute="width" constant="60" id="hBi-Bx-yZ3"/>
                                         </constraints>
-                                        <state key="normal" title="Reset"/>
+                                        <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                        <state key="normal" title="Reset">
+                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
                                         <connections>
                                             <action selector="didPressResetButton:" destination="j4e-sx-rum" eventType="touchUpInside" id="sWr-Sy-1g1"/>
                                         </connections>
                                     </button>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-180" maxValue="180" translatesAutoresizingMaskIntoConstraints="NO" id="DJR-xc-opb">
-                                        <rect key="frame" x="68" y="15" width="239" height="31"/>
-                                        <connections>
-                                            <action selector="didChangeSlider:" destination="j4e-sx-rum" eventType="valueChanged" id="VlD-fZ-uxl"/>
-                                        </connections>
-                                    </slider>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="4KA-3x-00O"/>
-                                    <constraint firstItem="DJR-xc-opb" firstAttribute="centerY" secondItem="aKQ-dR-WNm" secondAttribute="centerY" id="4OB-a6-X5I"/>
-                                    <constraint firstItem="DJR-xc-opb" firstAttribute="leading" secondItem="aKQ-dR-WNm" secondAttribute="trailing" constant="10" id="HNi-gl-cdd"/>
-                                    <constraint firstItem="aKQ-dR-WNm" firstAttribute="centerY" secondItem="eIb-JK-aQd" secondAttribute="centerY" id="I5g-iu-URd"/>
-                                    <constraint firstItem="aKQ-dR-WNm" firstAttribute="leading" secondItem="eIb-JK-aQd" secondAttribute="leading" id="Krh-Ur-u51"/>
+                                    <constraint firstAttribute="trailing" secondItem="DJR-xc-opb" secondAttribute="trailing" constant="20" id="8Uy-fD-mCh"/>
+                                    <constraint firstAttribute="bottom" secondItem="WOF-nc-hTR" secondAttribute="bottom" id="8yl-F7-hd4"/>
+                                    <constraint firstItem="WOF-nc-hTR" firstAttribute="top" secondItem="DJR-xc-opb" secondAttribute="bottom" id="Ap4-2n-uRf"/>
+                                    <constraint firstItem="DJR-xc-opb" firstAttribute="top" secondItem="eIb-JK-aQd" secondAttribute="top" constant="10" id="Jaz-un-7QJ"/>
+                                    <constraint firstItem="DJR-xc-opb" firstAttribute="leading" secondItem="eIb-JK-aQd" secondAttribute="leading" constant="20" id="VLX-ZD-f1L"/>
+                                    <constraint firstItem="aKQ-dR-WNm" firstAttribute="centerY" secondItem="WOF-nc-hTR" secondAttribute="centerY" id="Vk7-Gz-64t"/>
+                                    <constraint firstItem="aKQ-dR-WNm" firstAttribute="centerX" secondItem="eIb-JK-aQd" secondAttribute="centerX" id="Yyp-az-Meo"/>
                                     <constraint firstAttribute="trailing" secondItem="MCM-ww-MHv" secondAttribute="trailing" id="ab1-EU-OVg"/>
                                     <constraint firstItem="MCM-ww-MHv" firstAttribute="centerY" secondItem="aKQ-dR-WNm" secondAttribute="centerY" id="dUk-a6-cEo"/>
-                                    <constraint firstItem="MCM-ww-MHv" firstAttribute="leading" secondItem="DJR-xc-opb" secondAttribute="trailing" constant="10" id="eK8-KP-LIc"/>
+                                    <constraint firstItem="WOF-nc-hTR" firstAttribute="leading" secondItem="eIb-JK-aQd" secondAttribute="leading" id="hRV-xS-cvn"/>
                                 </constraints>
                             </view>
                         </subviews>

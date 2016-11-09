@@ -29,7 +29,7 @@ class PhotoRotationContainerViewController: UIViewController {
         vc.photoRotationContainer = self
         photoRotationController = vc
         
-        vc.image = UIImage(named: "001 - 1920x1200.jpg")!
+        vc.originalImage = UIImage(named: "001 - 1920x1200.jpg")!
         //        vc.image = UIImage(named: "page1_background")!
         
         self.addChildViewController(vc)
@@ -96,7 +96,7 @@ class PhotoRotationContainerViewController: UIViewController {
     
     @IBAction func didPressResetButton(_ sender: UIButton) {
         
-        photoRotationController.reset()
+        photoRotationController.resetToOriginalImage()
     }
     
     @IBAction func didPressSaveButton(_ sender: UIButton) {
@@ -104,4 +104,9 @@ class PhotoRotationContainerViewController: UIViewController {
         photoRotationController.save()
     }
 
+    @IBAction func didPressRotateButton(_ sender: UIButton) {
+        
+        photoRotationController.rotate()
+    }
+    
 }
