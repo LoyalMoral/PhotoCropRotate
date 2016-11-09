@@ -95,6 +95,12 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     
     @IBOutlet weak var cropBorderView: UIView!
     
+    @IBOutlet weak var gridLinesView: UIView!
+    
+    @IBOutlet weak var verticalGridsView: UIView!
+    
+    @IBOutlet weak var horizontalGridsView: UIView!
+    
     // MARK: - Style Constraints
     
     @IBOutlet weak var cropCornerTopLeftHHeightConstraint: NSLayoutConstraint!
@@ -234,6 +240,14 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         cropCornerTopRightHTrailingConstraint.constant = -kCropCornerThick
         
         cropCornerBottomRightHBottomConstraint.constant = -kCropCornerThick
+        
+        horizontalGridsView.layer.borderColor = UIColor.white.cgColor
+        horizontalGridsView.layer.borderWidth = 1 / UIScreen.main.scale // 1 pixel
+        
+        verticalGridsView.layer.borderColor = UIColor.white.cgColor
+        verticalGridsView.layer.borderWidth = 1 / UIScreen.main.scale // 1 pixel
+        
+        showGrid(showed: false, animated: false)
     }
     
     /*----------------------------------------------------------------------------
@@ -295,7 +309,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         let minHorizontalConstraint = 0.5 * (cropMaskView.bounds.size.width - cropAreaView.frame.size.width * fitRatio)
         let minVerticalConstraint = 0.5 * (cropMaskView.bounds.size.height - cropAreaView.frame.size.height * fitRatio)
         
-        UIView.animate(withDuration: 0.1, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.curveEaseInOut, animations: {
         
             self.topCropConstraint.constant = minVerticalConstraint
             self.bottomCropConstraint.constant = minVerticalConstraint
@@ -518,6 +532,23 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         currentRotateAngle = newAngle
     }
     
+    /*----------------------------------------------------------------------------
+     Description:   Grid
+     -----------------------------------------------------------------------------*/
+    func showGrid(showed: Bool = true, animated: Bool = true) -> () {
+        
+        let duration = animated ? 0.1 : 0
+        let newAlpha: CGFloat = showed ? 1 : 0
+        
+        UIView.animate(withDuration: duration, animations: {
+            
+            self.gridLinesView.alpha = newAlpha
+            
+        }, completion: { (finished: Bool) -> Void in
+            
+        })
+    }
+    
     // MARK: - Utilities
     
     func rotateAngle(from transform: CGAffineTransform) -> CGFloat {
@@ -596,6 +627,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
             previousScrollViewFrame = calculateViewFrame(originalFrame: scrollViewBoundsFrame(), afterRotate: currentRotateAngle)
             previousScrollViewOffset = imageScrollView.contentOffset
             
+            showGrid()
+            
         case .changed:
             
             let changeLocation = CGPoint(x: location.x - previousCropPanLocation.x,
@@ -608,6 +641,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         default:
             needZoomToCropArea = true
             zoomToCropAreaIfNeeded()
+            
+            showGrid(showed: false, animated: true)
             
             break
         }
@@ -624,6 +659,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         switch gesture.state {
         case .began:
             scrollRotatedAngle = rotateAngle(from: imageScrollView.transform)
+            showGrid()
             
         case .changed:
             
@@ -638,6 +674,8 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
             
         default:
             zoomToCropAreaIfNeeded()
+            showGrid(showed: false, animated: true)
+            
             break
         }
         
@@ -682,6 +720,26 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         cancelZoomToCropArea()
         zoomToCropAreaIfNeeded()
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
+        showGrid()
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        
+        showGrid(showed: false, animated: true)
+    }
+    
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        
+        showGrid()
+    }
+    
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        
+        showGrid(showed: false, animated: true)
     }
     
     // MARK: - Events
