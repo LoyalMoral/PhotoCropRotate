@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0F3731EC1DCC688000C392A2 /* PhotoRotationScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F3731EB1DCC688000C392A2 /* PhotoRotationScrollView.swift */; };
 		0F376CF81DD1BF150029BB6E /* 001 - 1920x1200.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0F376CF71DD1BF150029BB6E /* 001 - 1920x1200.jpg */; };
+		0F376CFA1DD2CFDC0029BB6E /* PhotoRotationContainer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F376CF91DD2CFDC0029BB6E /* PhotoRotationContainer.storyboard */; };
+		0F376CFC1DD2CFEC0029BB6E /* PhotoRotationContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F376CFB1DD2CFEC0029BB6E /* PhotoRotationContainerViewController.swift */; };
 		0F65B4511DCB170C0049AD47 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F65B4501DCB170C0049AD47 /* AppDelegate.swift */; };
 		0F65B4531DCB170C0049AD47 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F65B4521DCB170C0049AD47 /* ViewController.swift */; };
 		0F65B4561DCB170C0049AD47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F65B4541DCB170C0049AD47 /* Main.storyboard */; };
@@ -45,6 +47,8 @@
 /* Begin PBXFileReference section */
 		0F3731EB1DCC688000C392A2 /* PhotoRotationScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoRotationScrollView.swift; sourceTree = "<group>"; };
 		0F376CF71DD1BF150029BB6E /* 001 - 1920x1200.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "001 - 1920x1200.jpg"; sourceTree = "<group>"; };
+		0F376CF91DD2CFDC0029BB6E /* PhotoRotationContainer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PhotoRotationContainer.storyboard; sourceTree = "<group>"; };
+		0F376CFB1DD2CFEC0029BB6E /* PhotoRotationContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoRotationContainerViewController.swift; sourceTree = "<group>"; };
 		0F65B44D1DCB170C0049AD47 /* PhotoRotate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoRotate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F65B4501DCB170C0049AD47 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0F65B4521DCB170C0049AD47 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -128,6 +132,8 @@
 				0F65B45C1DCB170C0049AD47 /* Info.plist */,
 				0F65B47E1DCB17300049AD47 /* PhotoRotation.storyboard */,
 				0F65B4801DCB17400049AD47 /* PhotoRotationViewController.swift */,
+				0F376CF91DD2CFDC0029BB6E /* PhotoRotationContainer.storyboard */,
+				0F376CFB1DD2CFEC0029BB6E /* PhotoRotationContainerViewController.swift */,
 				0F9BBD451DD03EB00034D13E /* Utilities.h */,
 				0F9BBD461DD03EB00034D13E /* Utilities.m */,
 				0F9BBD4C1DD058C90034D13E /* UIImage+CropRotate.h */,
@@ -276,6 +282,7 @@
 				0F376CF81DD1BF150029BB6E /* 001 - 1920x1200.jpg in Resources */,
 				0F65B4581DCB170C0049AD47 /* Assets.xcassets in Resources */,
 				0F65B4561DCB170C0049AD47 /* Main.storyboard in Resources */,
+				0F376CFA1DD2CFDC0029BB6E /* PhotoRotationContainer.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F3731EC1DCC688000C392A2 /* PhotoRotationScrollView.swift in Sources */,
+				0F376CFC1DD2CFEC0029BB6E /* PhotoRotationContainerViewController.swift in Sources */,
 				0F9BBD4E1DD058C90034D13E /* UIImage+CropRotate.m in Sources */,
 				0F65B4811DCB17400049AD47 /* PhotoRotationViewController.swift in Sources */,
 				0F65B4531DCB170C0049AD47 /* ViewController.swift in Sources */,

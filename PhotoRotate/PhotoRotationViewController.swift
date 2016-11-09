@@ -35,6 +35,22 @@ struct ActivePanCrop {
     }
 }
 
+struct Padding {
+    
+    var top: CGFloat = 0
+    var right: CGFloat = 0
+    var bottom: CGFloat = 0
+    var left: CGFloat = 0
+    
+    init(t: CGFloat = 0, r: CGFloat = 0, b: CGFloat = 0, l: CGFloat = 0) {
+        
+        top = t
+        right = r
+        bottom = b
+        left = l
+    }
+}
+
 class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate, UIScrollViewDelegate {
     
     // MARK: - Outlets
@@ -79,10 +95,27 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     
     @IBOutlet weak var cropBorderView: UIView!
     
-    @IBOutlet weak var rotateSlider: UISlider!
+    // MARK: - Style Constraints
     
+    @IBOutlet weak var cropCornerTopLeftHHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var cropCornerTopLeftHWidthConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var cropCornerTopLeftHTopConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var cropCornerTopLeftHLeadingConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var cropCornerTopLeftVWidthConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var cropCornerTopLeftVHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var cropCornerTopRightHTrailingConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var cropCornerBottomRightHBottomConstraint: NSLayoutConstraint!
     
     // MARK: - Properties
+    
+    weak var photoRotationContainer: PhotoRotationContainerViewController!
     
     var image: UIImage! = UIImage(named: "page1_background")!
     
@@ -91,6 +124,12 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     let minCropPadding: CGFloat = 20
     let minCropSize: CGFloat = 80
     let maxRotateAngle = CGFloat(M_PI_2)
+    
+    let kCropAreaBorderWidth: CGFloat = 1
+    let kCropCornerThick: CGFloat = 2
+    let kCropCornerLength: CGFloat = 22
+    let kGridThick: CGFloat = 1 / UIScreen.main.scale
+    
     
     var activePanCrop = ActivePanCrop()
     
@@ -172,12 +211,29 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
 //        imageScrollView.layer.borderWidth = 1
         
         cropBorderView.layer.borderColor = UIColor.white.cgColor
-        cropBorderView.layer.borderWidth = 1
+        cropBorderView.layer.borderWidth = kCropAreaBorderWidth
         
-        self.rotateSlider.minimumValue = -(Float)(maxRotateAngle)
-        self.rotateSlider.maximumValue = Float(maxRotateAngle)
-        self.rotateSlider.value = 0
+        photoRotationContainer.rotateSlider.minimumValue = -(Float)(maxRotateAngle)
+        photoRotationContainer.rotateSlider.maximumValue = Float(maxRotateAngle)
+        photoRotationContainer.rotateSlider.value = 0
         
+        // Style
+//        let kCropAreaBorderWidth: CGFloat = 1
+//        let kCropCornerThick: CGFloat = 3
+//        let kCropCornerLength: CGFloat = 20
+//        let kGridThick: CGFloat = 1 / UIScreen.main.scale
+        
+        cropCornerTopLeftHWidthConstraint.constant = kCropCornerLength
+        cropCornerTopLeftHHeightConstraint.constant = kCropCornerThick
+        cropCornerTopLeftHLeadingConstraint.constant = -kCropCornerThick
+        cropCornerTopLeftHTopConstraint.constant = -kCropCornerThick
+        
+        cropCornerTopLeftVWidthConstraint.constant = kCropCornerThick
+        cropCornerTopLeftVHeightConstraint.constant = kCropCornerLength
+        
+        cropCornerTopRightHTrailingConstraint.constant = -kCropCornerThick
+        
+        cropCornerBottomRightHBottomConstraint.constant = -kCropCornerThick
     }
     
     /*----------------------------------------------------------------------------
@@ -190,7 +246,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
         scrollRotatedAngle = 0
         currentRotateAngle = 0
-        rotateSlider.value = 0
+        photoRotationContainer.rotateSlider.value = 0
         
         let imageSize = image.size
         maxSize = CGSize(width: cropMaskView.bounds.size.width - 2 * minCropPadding,
@@ -239,7 +295,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         let minHorizontalConstraint = 0.5 * (cropMaskView.bounds.size.width - cropAreaView.frame.size.width * fitRatio)
         let minVerticalConstraint = 0.5 * (cropMaskView.bounds.size.height - cropAreaView.frame.size.height * fitRatio)
         
-        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations: {
+        UIView.animate(withDuration: 0.1, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations: {
         
             self.topCropConstraint.constant = minVerticalConstraint
             self.bottomCropConstraint.constant = minVerticalConstraint
@@ -576,7 +632,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
 //            imageScrollView.transform = currentTranform
             
             rotateScrollView(by: scrollRotatedAngle + gesture.rotation - currentRotateAngle)
-            rotateSlider.value = Float(currentRotateAngle)
+            photoRotationContainer.rotateSlider.value = Float(currentRotateAngle)
             
             scaleScrollViewToMatchCropArea()
             
@@ -630,7 +686,7 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
     
     // MARK: - Events
     
-    @IBAction func didPressSaveButton(_ sender: UIButton) {
+    func save() {
         
         // Visible image in scrollview
         
@@ -722,22 +778,15 @@ class PhotoRotationViewController: UIViewController, UIGestureRecognizerDelegate
         
     }
     
-    @IBAction func didPressResetButton(_ sender: UIButton) {
-        
-        self.reset()
-    }
     
-    @IBAction func didChangeSlider(_ sender: UISlider) {
+    func didChangeSlider(_ sender: UISlider) {
         
-        let addedAngle = CGFloat(rotateSlider.value) - currentRotateAngle
+        let addedAngle = CGFloat(photoRotationContainer.rotateSlider.value) - currentRotateAngle
         rotateScrollView(by: addedAngle)
         
         scaleScrollViewToMatchCropArea()
         
         cancelZoomToCropArea()
         zoomToCropAreaIfNeeded()
-        
-//        imageScrollView.transform = imageScrollView.transform.rotated(by: addedAngle)
-//        currentRotateAngle = rotateAngle(from: imageScrollView.transform)
     }
 }
